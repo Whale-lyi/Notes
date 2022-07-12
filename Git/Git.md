@@ -1,62 +1,59 @@
-# Git及GitHub使用
-## Git部分
+# Git
 
-- ### Git中文件的三种状态
-    - #### Modified 已修改
-        - 修改了文件，但还没保存到数据库中
+## 1. Git常用命令
 
-    - #### Staged 已暂存
-        - 对一个已修改文件的当前版本做了标记，使之包含在下次提交的快照中
+- **Git中文件的三种状态**
 
-    - #### Committed 已提交
-        - 数据已安全的保存在本地数据库中
+  - **Modified 已修改**
+    - 修改了文件，但还没保存到数据库中
 
-- ### Git使用与操作命令
-    - #### 配置
-        - git config --global user.name "name"
-        - git config --global user.email "email"
-        - git config --list
+  - **Staged 已暂存**
+    - 对一个已修改文件的当前版本做了标记，使之包含在下次提交的快照中
 
-    - #### 新建Git仓库
-        - git init
+  - **Committed 已提交**
+    - 数据已安全的保存在本地数据库中
 
-    - #### 添加文件到暂存区
-        - git add \<filename>
-        - git add .
-        - gti add -A
-    
-    - #### 提交暂存区的修改
-        - git commit -m \<commit message>
-    
-    - #### 查看git仓库状态
-        - git status
-    
-    - #### 查看提交日志
-        - git log (键入:q退出)
+| 命令                                 | 作用             |
+| ------------------------------------ | ---------------- |
+| git config --global user.name 用户名 | 设置用户签名     |
+| git config --global user.email 邮箱  | 设置用户签名     |
+| git config --list                    | 查看配置         |
+| git init                             | 初始化本地库     |
+| git status                           | 查看本地库状态   |
+| git add 文件名                       | 添加到暂存区     |
+| git commint -m "日志信息" 文件名     | 提交到本地库     |
+| git reflog                           | 查看版本信息     |
+| git log                              | 查看版本详细信息 |
+| git reset --hard 版本号              | 版本穿梭         |
 
-    - #### 版本切换
-        - git checkout \<某版本的代号前几位,可区分即可/master(最新版本)>
+## 2. Git分支操作
 
-    - #### 新建分支
-        - git checkout -b \<branch name>
-    
-    - #### 查看分支信息
-        - git branch
-    
-    - #### 合并分支
-        - git merge (第一行结尾添加auto)
+| 命令                   | 作用                           |
+| ---------------------- | ------------------------------ |
+| git branch 分支名      | 创建分支                       |
+| git branch -v          | 查看分支                       |
+| git branch -d 分支名   | 删除分支                       |
+| git checkout 分支名    | 切换分支                       |
+| git checkout -b 分支名 | 创建新分支并立即切换到该分支下 |
+| git merge 分支名       | 把指定的分支合并到当前分支上   |
 
-## GitHub部分
-- ### SSH-key与身份校验
-    - #### SSH-key生成
-        - ssh-keygen -t rsa -C "your email"
-        - cat id_rsa.pub
-    
-    - #### 关联SSH-key到GitHub账户
-- ### Git与GitHub交互常用命令
-    - #### 克隆Git仓库到本地,让自己能够查看或修改项目
-        - git clone
-    - #### 拉取远程仓库数据并合并到当前分支
-        - git pull (= git fetch + git merge)
-    - #### 推送本地仓库的commit记录到远程仓库
-        - git push
+- 产生合并冲突
+  - 表现：后面状态为MERGING
+  - 原因：合并分支时，两个分支在同一个文件的同一个位置有两套完全不同的修改。Git无法替我们决定使用哪个。必须人为决定新代码内容
+- 解决冲突
+  - 编辑有冲突的文件，删除特殊符号，决定要使用的内容
+  - 添加到暂存区
+  - 执行提交（此处的git commit 不能带文件名）
+
+## 3. GitHub操作 
+
+| 命令                               | 作用                                                   |
+| ---------------------------------- | ------------------------------------------------------ |
+| git remote -v                      | 查看当前所有远程地址别名                               |
+| git remote add 别名 远程地址       | 起别名                                                 |
+| git push 别名 分支                 | 推送本地分支上的内容到远程仓库                         |
+| git clone 远程地址                 | 将远程仓库的内容克隆到本地                             |
+| git pull 远程库地址别名 远程分支名 | 将远程仓库的分支最新内容拉下来后与当前本地分支直接合并 |
+| ssh-keygen -t rsa -C 邮箱          | 生成SSH-key                                            |
+| cat id_rsa.pub                     | 查看公钥                                               |
+
