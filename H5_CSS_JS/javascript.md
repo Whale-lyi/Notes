@@ -960,6 +960,1020 @@ function name(parameters, delimited, by, comma) {
 
 ### 1.17 箭头函数，基础知识
 
+创建函数还有另外一种非常简单的语法，并且这种方法通常比函数表达式更好。它被称为“箭头函数”
+
+```javascript
+let func = (arg1, arg2, ..., argN) => expression;
+```
+
+这里创建了一个函数 `func`，它接受参数 `arg1..argN`，然后使用参数对右侧的 `expression` 求值并返回其结果。
+
+换句话说，它是下面这段代码的更短的版本：
+
+```javascript
+let func = function(arg1, arg2, ..., argN) {
+  return expression;
+};
+```
+
+如果没有参数，括号则是空的（但括号必须保留）
+
+例如，动态创建一个函数：
+
+```javascript
+let age = prompt("What is your age?", 18);
+
+let welcome = (age < 18) ?
+  () => alert('Hello!') :
+  () => alert("Greetings!");
+
+welcome();
+```
+
+- 多行的箭头函数
+
+  有时我们需要更复杂一点的函数，比如带有多行的表达式或语句。在这种情况下，我们可以使用花括号将它们括起来。主要区别在于，用花括号括起来之后，需要包含 `return` 才能返回值（就像常规函数一样）。
+
+  ```javascript
+  let sum = (a, b) => {  // 花括号表示开始一个多行函数
+    let result = a + b;
+    return result; // 如果我们使用了花括号，那么我们需要一个显式的 “return”
+  };
+  
+  alert( sum(1, 2) ); // 3
+  ```
+
 ### 1.18 JavaScript特性
 
 ## 2. 代码质量
+
+### 2.1 在浏览器中调试
+
+- 有 3 种方式来暂停一个脚本：
+
+  1. 断点。
+  2. `debugger` 语句。
+  3. error（如果开发者工具是打开状态，并且按钮 是开启的状态）。
+
+- 日志记录
+
+  - `console.log` 函数
+
+    例如：将从 `0` 到 `4` 的值输出到控制台上：
+
+    ```javascript
+    // 打开控制台来查看
+    for (let i = 0; i < 5; i++) {
+      console.log("value", i);
+    }
+    ```
+
+### 2.2 代码风格
+
+没有人喜欢读一长串代码，最好将代码分割一下。
+
+例如：
+
+```javascript
+// 回勾引号 ` 允许将字符串拆分为多行
+let str = `
+  ECMA International's TC39 is a group of JavaScript developers,
+  implementers, academics, and more, collaborating with the community
+  to maintain and evolve the definition of JavaScript.
+`;
+```
+
+### 2.3 注释
+
+一个好的开发者的标志之一就是他的注释：它们的存在甚至它们的缺席（译注：在该注释的地方注释，在不需要注释的地方则不注释，甚至写得好的自描述函数本身就是一种注释）。
+
+好的注释可以使我们更好地维护代码，一段时间之后依然可以更高效地回到代码高效开发。
+
+**注释这些内容：**
+
+- 整体架构，高层次的观点。
+- 函数的用法。
+- 重要的解决方案，特别是在不是很明显时。
+
+**避免注释：**
+
+- 描述“代码如何工作”和“代码做了什么”。
+- 避免在代码已经足够简单或代码有很好的自描述性而不需要注释的情况下，还写些没必要的注释。
+
+### 2.4 忍者代码
+
+### 2.5 使用Mocha进行自动化测试
+
+### 2.6 Polyfill和转译器
+
+- 转译器是一种可以将源码转译成另一种源码的特殊的软件。它可以解析（“阅读和理解”）现代代码，并使用旧的语法结构对其进行重写，进而使其也可以在旧的引擎中工作。
+- 更新/添加新函数的脚本被称为“polyfill”。它“填补”了空白并添加了缺失的实现。
+
+## 3. Object（对象）：基础知识
+
+### 3.1 对象
+
+- 可以用下面两种语法中的任一种来创建一个空的对象：
+
+  ```javascript
+  let user = new Object(); // “构造函数” 的语法
+  let user = {};  // “字面量” 的语法
+  
+  let user = {     // 一个对象
+    name: "John",  // 键 "name"，值 "John"
+    age: 30        // 键 "age"，值 30
+  };
+  ```
+
+- 可以使用点符号访问属性值：
+
+  ```javascript
+  // 读取文件的属性：
+  alert( user.name ); // John
+  alert( user.age ); // 30
+  ```
+
+- 属性的值可以是任意类型，如添加一个布尔类型：
+
+  ```javascript
+  user.isAdmin = true;
+  ```
+
+- 可以用 `delete` 操作符移除属性：
+
+  ```javascript
+  delete user.age;
+  ```
+
+- 也可以用多字词语来作为属性名，但必须给它们加上引号：
+
+  ```javascript
+  let user = {
+    name: "John",
+    age: 30,
+    "likes birds": true  // 多词属性名必须加引号
+  };
+  ```
+
+- 对于多词属性，点操作就不能用了，另一种方法，就是使用方括号，可用于任何字符串：
+
+  ```javascript
+  let user = {};
+  
+  // 设置
+  user["likes birds"] = true;
+  
+  // 读取
+  alert(user["likes birds"]); // true
+  
+  // 删除
+  delete user["likes birds"];
+  ```
+
+- 方括号同样提供了一种可以通过任意表达式来获取属性名的方式：
+
+  ```javascript
+  let key = "likes birds";
+  
+  // 跟 user["likes birds"] = true; 一样
+  user[key] = true;
+  ```
+
+  在这里，变量 `key` 可以是程序运行时计算得到的，也可以是根据用户的输入得到的。然后我们可以用它来访问属性。这给了我们很大的灵活性。
+
+- 当创建一个对象时，我们可以在对象字面量中使用方括号。这叫做 **计算属性**。
+
+  例如：
+
+  ```javascript
+  let fruit = prompt("Which fruit to buy?", "apple");
+  
+  let bag = {
+    [fruit]: 5, // 属性名是从 fruit 变量中得到的
+  };
+  
+  alert( bag.apple ); // 5 如果 fruit="apple"
+  ```
+
+- 我们可以在方括号中使用更复杂的表达式：
+
+  ```javascript
+  let fruit = 'apple';
+  let bag = {
+    [fruit + 'Computers']: 5 // bag.appleComputers = 5
+  };
+  ```
+
+  - 方括号比点符号更强大。它允许任何属性名和变量，但写起来也更加麻烦。
+
+  - 所以，大部分时间里，当属性名是已知且简单的时候，就使用点符号。如果我们需要一些更复杂的内容，那么就用方括号。
+
+- 属性值简写
+
+  - 例如：
+
+    ```javascript
+    function makeUser(name, age) {
+      return {
+        name: name,
+        age: age,
+        // ……其他的属性
+      };
+    }
+    
+    let user = makeUser("John", 30);
+    alert(user.name); // John
+    ```
+
+    在上面的例子中，属性名跟变量名一样。这种通过变量生成属性的应用场景很常见，在这有一种特殊的 **属性值缩写** 方法，使属性名变得更短。
+
+    可以用 `name` 来代替 `name:name` 像下面那样：
+
+    ```javascript
+    function makeUser(name, age) {
+      return {
+        name, // 与 name: name 相同
+        age,  // 与 age: age 相同
+        // ...
+      };
+    }
+    ```
+
+    我们可以把属性名简写方式和正常方式混用：
+
+    ```javascript
+    let user = {
+      name,  // 与 name:name 相同
+      age: 30
+    };
+    ```
+
+- 属性命名没有限制。属性名可以是任何字符串或者 symbol
+
+  - 其他类型会被自动地转换为字符串。
+
+    ```javascript
+    let obj = {
+      0: "test" // 等同于 "0": "test"
+    };
+    
+    // 都会输出相同的属性（数字 0 被转为字符串 "0"）
+    alert( obj["0"] ); // test
+    alert( obj[0] ); // test (相同的属性)
+    ```
+
+  - 这里有个小陷阱：一个名为 `__proto__` 的属性。我们不能将它设置为一个非对象的值：
+
+    ```javascript
+    let obj = {};
+    obj.__proto__ = 5; // 分配一个数字
+    alert(obj.__proto__); // [object Object] —— 值为对象，与预期结果不同
+    ```
+
+- 属性存在性测试，"in"操作符
+
+  - 相比于其他语言，JavaScript 的对象有一个需要注意的特性：能够被访问任何属性。即使属性不存在也不会报错！
+
+    读取不存在的属性只会得到 `undefined`。所以我们可以很容易地判断一个属性是否存在：
+
+    ```javascript
+    let user = {};
+    
+    alert( user.noSuchProperty === undefined ); // true 意思是没有这个属性
+    ```
+
+  - 检查属性是否存在的操作符 `"in"`
+
+    例如：
+
+    ```javascript
+    let user = { name: "John", age: 30 };
+    
+    alert( "age" in user ); // true，user.age 存在
+    alert( "blabla" in user ); // false，user.blabla 不存在。
+    ```
+
+  - 请注意，`in` 的左边必须是 **属性名**。通常是一个带引号的字符串。
+
+    如果我们省略引号，就意味着左边是一个变量，它应该包含要判断的实际属性名。例如：
+
+    ```javascript
+    let user = { age: 30 };
+    
+    let key = "age";
+    alert( key in user ); // true，属性 "age" 存在
+    ```
+
+  - 为何会有 `in` 运算符呢？
+
+    属性存在，但存储的值是 `undefined` 的时候：
+
+    ```javascript
+    let obj = {
+      test: undefined
+    };
+    
+    alert( obj.test ); // 显示 undefined，所以属性不存在？
+    
+    alert( "test" in obj ); // true，属性存在！
+    ```
+
+- **"for..in" 循环**
+
+  - 为了遍历一个对象的所有键（key），可以使用一个特殊形式的循环：`for..in`。
+
+    例如，让我们列出 `user` 所有的属性：
+
+    ```javascript
+    let user = {
+      name: "John",
+      age: 30,
+      isAdmin: true
+    };
+    
+    for (let key in user) {
+      // keys
+      alert( key );  // name, age, isAdmin
+      // 属性键的值
+      alert( user[key] ); // John, 30, true
+    }
+    ```
+
+- 排序
+
+  - 整数属性会被进行排序，其他属性则按照创建的顺序显示。详情如下：
+
+    例如，让我们考虑一个带有电话号码的对象：
+
+    ```javascript
+    let codes = {
+      "49": "Germany",
+      "41": "Switzerland",
+      "44": "Great Britain",
+      // ..,
+      "1": "USA"
+    };
+    
+    for(let code in codes) {
+      alert(code); // 1, 41, 44, 49
+    }
+    ```
+
+### 3.2 对象引用和复制
+
+- 对象通过引用被赋值和拷贝。换句话说，一个变量存储的不是“对象的值”，而是一个对值的“引用”（内存地址）。因此，拷贝此类变量或将其作为函数参数传递时，所拷贝的是引用，而不是对象本身。
+
+- 所有通过被拷贝的引用的操作（如添加、删除属性）都作用在同一个对象上。
+
+- 仅当两个对象为同一对象时，两者才相等。`==`，`===`
+
+- 我们可以创建一个新对象，通过遍历已有对象的属性，并在原始类型值的层面复制它们，以实现对已有对象结构的复制。
+
+  就像这样：
+
+  ```javascript
+  let user = {
+    name: "John",
+    age: 30
+  };
+  
+  let clone = {}; // 新的空对象
+  
+  // 将 user 中所有的属性拷贝到其中
+  for (let key in user) {
+    clone[key] = user[key];
+  }
+  
+  // 现在 clone 是带有相同内容的完全独立的对象
+  clone.name = "Pete"; // 改变了其中的数据
+  
+  alert( user.name ); // 原来的对象中的 name 属性依然是 John
+  ```
+
+  我们也可以使用 Object.assign 方法来达成同样的效果。
+
+- 为了创建“真正的拷贝”（一个克隆），我们可以使用 `Object.assign` 来做所谓的“浅拷贝”（嵌套对象被通过引用进行拷贝）或者使用“深拷贝”函数，例如 [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep)。
+
+  - 语法是：
+
+    ```javascript
+    Object.assign(dest, [src1, src2, src3...])
+    ```
+
+    - 第一个参数 `dest` 是指目标对象。
+    - 更后面的参数 `src1, ..., srcN`（可按需传递多个参数）是源对象。
+    - 该方法将所有源对象的属性拷贝到目标对象 `dest` 中。换句话说，从第二个开始的所有参数的属性都被拷贝到第一个参数的对象中。
+    - 调用结果返回 `dest`。
+
+  - 我们可以用它来合并多个对象：
+
+    ```javascript
+    let user = { name: "John" };
+    
+    let permissions1 = { canView: true };
+    let permissions2 = { canEdit: true };
+    
+    // 将 permissions1 和 permissions2 中的所有属性都拷贝到 user 中
+    Object.assign(user, permissions1, permissions2);
+    
+    // 现在 user = { name: "John", canView: true, canEdit: true }
+    ```
+
+  - 如果被拷贝的属性的属性名已经存在，那么它会被覆盖：
+
+    ```javascript
+    let user = { name: "John" };
+    
+    Object.assign(user, { name: "Pete" });
+    
+    alert(user.name); // 现在 user = { name: "Pete" }
+    ```
+
+    我们也可以用 `Object.assign` 代替 `for..in` 循环来进行简单克隆：
+
+    ```javascript
+    let user = {
+      name: "John",
+      age: 30
+    };
+    
+    let clone = Object.assign({}, user);
+    ```
+
+    它将 `user` 中的所有属性拷贝到了一个空对象中，并返回这个新的对象。
+
+- 深层克隆
+
+  - 属性可以是对其他对象的引用。
+  - 为了解决这个问题，我们应该使用一个拷贝循环来检查 `user[key]` 的每个值，如果它是一个对象，那么也复制它的结构。这就是所谓的“深拷贝”。
+
+- **使用 const 声明的对象也是可以被修改的**
+
+  通过引用对对象进行存储的一个重要的副作用是声明为 `const` 的对象 **可以** 被修改。
+
+  例如：
+
+  ```javascript
+  const user = {
+    name: "John"
+  };
+  
+  user.name = "Pete"; // (*)
+  
+  alert(user.name); // Pete
+  ```
+
+  看起来 `(*)` 行的代码会触发一个错误，但实际并没有。`user` 的值是一个常量，它必须始终引用同一个对象，但该对象的属性可以被自由修改。
+
+  换句话说，只有当我们尝试将 `user=...` 作为一个整体进行赋值时，`const user` 才会报错。
+
+### 3.3 垃圾回收
+
+主要需要掌握的内容：
+
+- 垃圾回收是自动完成的，我们不能强制执行或是阻止执行。
+- 当对象是可达状态时，它一定是存在于内存中的。
+- 被引用与可访问（从一个根）不同：一组相互连接的对象可能整体都不可达，正如我们在上面的例子中看到的那样。
+
+现代引擎实现了垃圾回收的高级算法。
+
+### 3.4 对象方法，"this"
+
+- 方法示例
+
+  ```javascript
+  let user = {
+    name: "John",
+    age: 30
+  };
+  
+  user.sayHi = function() {
+    alert("Hello!");
+  };
+  
+  user.sayHi(); // Hello!
+  ```
+
+  - 我们也可以使用预先声明的函数作为方法，就像这样：
+
+  ```javascript
+  let user = {
+    // ...
+  };
+  
+  // 首先，声明函数
+  function sayHi() {
+    alert("Hello!");
+  }
+  
+  // 然后将其作为一个方法添加
+  user.sayHi = sayHi;
+  
+  user.sayHi(); // Hello!
+  ```
+
+- 方法简写
+
+  ```javascript
+  // 这些对象作用一样
+  
+  user = {
+    sayHi: function() {
+      alert("Hello");
+    }
+  };
+  
+  // 方法简写看起来更好，对吧？
+  let user = {
+    sayHi() { // 与 "sayHi: function(){...}" 一样
+      alert("Hello");
+    }
+  };
+  ```
+
+- **"this" 不受限制**
+
+  JavaScript 中的 `this` 可以用于任何函数，即使它不是对象的方法。
+
+  下面这样的代码没有语法错误：
+
+  ```javascript
+  function sayHi() {
+    alert( this.name );
+  }
+  ```
+
+  `this` 的值是在代码运行时计算出来的，它取决于代码上下文。
+
+  例如，这里相同的函数被分配给两个不同的对象，在调用中有着不同的 “this” 值：
+
+  ```javascript
+  let user = { name: "John" };
+  let admin = { name: "Admin" };
+  
+  function sayHi() {
+    alert( this.name );
+  }
+  
+  // 在两个对象中使用相同的函数
+  user.f = sayHi;
+  admin.f = sayHi;
+  
+  // 这两个调用有不同的 this 值
+  // 函数内部的 "this" 是“点符号前面”的那个对象
+  user.f(); // John（this == user）
+  admin.f(); // Admin（this == admin）
+  
+  admin['f'](); // Admin（使用点符号或方括号语法来访问这个方法，都没有关系。）
+  ```
+
+  这个规则很简单：如果 `obj.f()` 被调用了，则 `this` 在 `f` 函数调用期间是 `obj`。所以在上面的例子中 this 先是 `user`，之后是 `admin`。
+
+- **在没有对象的情况下调用：**`this == undefined`
+
+- **箭头函数没有自己的"this"**
+
+  - 箭头函数有些特别：它们没有自己的 `this`。如果我们在这样的函数中引用 `this`，`this` 值取决于外部“正常的”函数。
+
+    举个例子，这里的 `arrow()` 使用的 `this` 来自于外部的 `user.sayHi()` 方法：
+
+    ```javascript
+    let user = {
+      firstName: "Ilya",
+      sayHi() {
+        let arrow = () => alert(this.firstName);
+        arrow();
+      }
+    };
+    
+    user.sayHi(); // Ilya
+    ```
+
+### 3.5 构造器和操作符 "new"
+
+- 构造函数，或简称构造器，就是常规函数，但大家对于构造器有个共同的约定，就是其命名首字母要大写。
+
+  例如：
+
+  ```javascript
+  function User(name) {
+    this.name = name;
+    this.isAdmin = false;
+  }
+  
+  let user = new User("Jack");
+  
+  alert(user.name); // Jack
+  alert(user.isAdmin); // false
+  ```
+
+- 当一个函数被使用 `new` 操作符执行时，它按照以下步骤：
+
+  1. 一个新的空对象被创建并分配给 `this`。
+  2. 函数体执行。通常它会修改 `this`，为其添加新的属性。
+  3. 返回 `this` 的值。
+
+- 构造函数只能使用 `new` 来调用。这样的调用意味着在开始时创建了空的 `this`，并在最后返回填充了值的 `this`。
+
+- 从技术上讲，任何函数（除了箭头函数，它没有自己的 `this`）都可以用作构造器。即可以通过 `new` 来运行，它会执行上面的算法。“首字母大写”是一个共同的约定，以明确表示一个函数将被使用 `new` 来运行。
+
+- **new function() { … }**
+
+  如果我们有许多行用于创建单个复杂对象的代码，我们可以将它们封装在一个立即调用的构造函数中，像这样：
+
+  ```javascript
+  // 创建一个函数并立即使用 new 调用它
+  let user = new function() {
+    this.name = "John";
+    this.isAdmin = false;
+  
+    // ……用于用户创建的其他代码
+    // 也许是复杂的逻辑和语句
+    // 局部变量等
+  };
+  ```
+
+  这个构造函数不能被再次调用，因为它不保存在任何地方，只是被创建和调用。因此，这个技巧旨在封装构建单个对象的代码，而无需将来重用。
+
+- 构造器的return
+
+  通常，构造器没有 `return` 语句。它们的任务是将所有必要的东西写入 `this`，并自动转换为结果。
+
+  但是，如果这有一个 `return` 语句，那么规则就简单了：
+
+  - 如果 `return` 返回的是一个对象，则返回这个对象，而不是 `this`。
+  - 如果 `return` 返回的是一个原始类型或空，则忽略。
+
+- **省略括号**
+
+  如果没有参数，我们可以省略 `new` 后的括号：
+
+  ```javascript
+  let user = new User; // <-- 没有参数
+  // 等同于
+  let user = new User();
+  ```
+
+- 构造器中的方法
+
+  例如，下面的 `new User(name)` 用给定的 `name` 和方法 `sayHi` 创建了一个对象：
+
+  ```javascript
+  function User(name) {
+    this.name = name;
+  
+    this.sayHi = function() {
+      alert( "My name is: " + this.name );
+    };
+  }
+  
+  let john = new User("John");
+  
+  john.sayHi(); // My name is: John
+  
+  /*
+  john = {
+     name: "John",
+     sayHi: function() { ... }
+  }
+  */
+  ```
+
+### 3.6 可选链 "?."
+
+- 可选链 `?.` 是一种访问嵌套对象属性的安全的方式。即使中间的属性不存在，也不会出现错误。
+
+- 如果可选链 `?.` 前面的值为 `undefined` 或者 `null`，它会停止运算并返回 `undefined`。
+
+  下面这是一种使用 `?.` 安全地访问 `user.address.street` 的方式：
+
+  ```javascript
+  let user = {}; // user 没有 address 属性
+  
+  alert( user?.address?.street ); // undefined（不报错）
+  ```
+
+- **不要过度使用可选链**
+  - 我们应该只将 `?.` 使用在一些东西可以不存在的地方。
+  - 例如，如果根据我们的代码逻辑，`user` 对象必须存在，但 `address` 是可选的，那么我们应该这样写 `user.address?.street`，而不是这样 `user?.address?.street`。
+  - 那么，如果 `user` 恰巧为 undefined，我们会看到一个编程错误并修复它。否则，如果我们滥用 `?.`，会导致代码中的错误在不应该被消除的地方消除了，这会导致调试更加困难。
+
+- `?.` **前的变量必须已声明**
+
+- 如果 `?.` 左边部分不存在，就会立即停止运算（“短路效应”）。
+
+  因此，如果在 `?.` 的右侧有任何进一步的函数调用或操作，它们均不会执行。
+
+- 其他变体：?.()，?.[]
+
+  - 将 `?.()` 用于调用一个可能不存在的函数。
+
+    在下面这段代码中，有些用户具有 `admin` 方法，而有些没有：
+
+    ```javascript
+    let userAdmin = {
+      admin() {
+        alert("I am admin");
+      }
+    };
+    
+    let userGuest = {};
+    
+    userAdmin.admin?.(); // I am admin
+    
+    userGuest.admin?.(); // 啥都没发生（没有这样的方法）
+    ```
+
+  - 如果我们想使用方括号 `[]` 而不是点符号 `.` 来访问属性，语法 `?.[]` 也可以使用。跟前面的例子类似，它允许从一个可能不存在的对象上安全地读取属性。
+
+    ```javascript
+    let key = "firstName";
+    
+    let user1 = {
+      firstName: "John"
+    };
+    
+    let user2 = null;
+    
+    alert( user1?.[key] ); // John
+    alert( user2?.[key] ); // undefined
+    ```
+
+- **我们可以使用** `?.` **来安全地读取或删除，但不能写入**
+
+  - 可选链 `?.` 不能用在赋值语句的左侧。
+
+    例如：
+
+    ```javascript
+    let user = null;
+    
+    user?.name = "John"; // Error，不起作用
+    // 因为它在计算的是：undefined = "John"
+    ```
+
+- 可选链 `?.` 语法有三种形式：
+  1. `obj?.prop` —— 如果 `obj` 存在则返回 `obj.prop`，否则返回 `undefined`。
+  2. `obj?.[prop]` —— 如果 `obj` 存在则返回 `obj[prop]`，否则返回 `undefined`。
+  3. `obj.method?.()` —— 如果 `obj.method` 存在则调用 `obj.method()`，否则返回 `undefined`。
+
+### 3.7 symbol类型
+
+- 根据规范，只有两种原始类型可以用作对象属性键：
+
+  - 字符串类型
+
+  - symbol 类型
+
+  否则，如果使用另一种类型，例如数字，它会被自动转换为字符串。所以 `obj[1]` 与 `obj["1"]` 相同，而 `obj[true]` 与 `obj["true"]` 相同。
+
+- `symbol` 是唯一标识符的基本类型
+
+- symbol 是使用带有可选描述（name）的 `Symbol()` 调用创建的。
+
+  创建时，我们可以给 symbol 一个描述（也称为 symbol 名），这在代码调试时非常有用：
+
+  ```javascript
+  // id 是描述为 "id" 的 symbol
+  let id = Symbol("id");
+  
+  let id = Symbol();
+  ```
+
+- symbol 总是不同的值，即使它们有相同的名字。如果我们希望同名的 symbol 相等，那么我们应该使用全局注册表：`Symbol.for(key)` 返回（如果需要的话则创建）一个以 `key` 作为名字的全局 symbol。使用 `Symbol.for` 多次调用 `key` 相同的 symbol 时，返回的就是同一个 symbol。
+
+- **symbol 不会被自动转换为字符串**
+
+  - 例如，这个 `alert` 将会提示出错：
+
+    ```javascript
+    let id = Symbol("id");
+    alert(id); // 类型错误：无法将 symbol 值转换为字符串。
+    ```
+
+    - 这是一种防止混乱的“语言保护”，因为字符串和 symbol 有本质上的不同，不应该意外地将它们转换成另一个。
+
+  - 如果我们真的想显示一个 symbol，我们需要在它上面调用 `.toString()`，如下所示：
+
+    ```javascript
+    let id = Symbol("id");
+    alert(id.toString()); // Symbol(id)，现在它有效了
+    ```
+
+    或者获取 `symbol.description` 属性，只显示描述（description）：
+
+    ```javascript
+    let id = Symbol("id");
+    alert(id.description); // id
+    ```
+
+- symbol 有两个主要的使用场景：
+
+  1. “隐藏” 对象属性。
+
+     - 如果我们想要向“属于”另一个脚本或者库的对象添加一个属性，我们可以创建一个 symbol 并使用它作为属性的键。symbol 属性不会出现在 `for..in` 中，因此它不会意外地被与其他属性一起处理。并且，它不会被直接访问，因为另一个脚本没有我们的 symbol。因此，该属性将受到保护，防止被意外使用或重写。
+
+     - 因此我们可以使用 symbol 属性“秘密地”将一些东西隐藏到我们需要的对象中，但其他地方看不到它。
+     - 但如果我们处于同样的目的，使用字符串 `"id"` 而不是用 symbol，那么 **就会** 出现冲突：
+
+  1. JavaScript 使用了许多系统 symbol，这些 symbol 可以作为 `Symbol.*` 访问。我们可以使用它们来改变一些内建行为。例如，在本教程的后面部分，我们将使用 `Symbol.iterator` 来进行 [迭代](https://zh.javascript.info/iterable) 操作，使用 `Symbol.toPrimitive` 来设置 [对象原始值的转换](https://zh.javascript.info/object-toprimitive) 等等。
+
+从技术上说，symbol 不是 100% 隐藏的。有一个内建方法 [Object.getOwnPropertySymbols(obj)](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols) 允许我们获取所有的 symbol。还有一个名为 [Reflect.ownKeys(obj)](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Reflect/ownKeys) 的方法可以返回一个对象的 **所有** 键，包括 symbol。但大多数库、内建方法和语法结构都没有使用这些方法。
+
+- 对象字面量中的symbol
+
+  - 如果我们要在对象字面量 `{...}` 中使用 symbol，则需要使用方括号把它括起来。
+
+    就像这样：
+
+    ```javascript
+    let id = Symbol("id");
+    
+    let user = {
+      name: "John",
+      [id]: 123 // 而不是 "id"：123
+    };
+    ```
+
+    这是因为我们需要变量 `id` 的值作为键，而不是字符串 “id”。
+
+- 全局symbol
+
+  - 这里有一个 **全局 symbol 注册表**。我们可以在其中创建 symbol 并在稍后访问它们，它可以确保每次访问相同名字的 symbol 时，返回的都是相同的 symbol。
+
+  - 要从注册表中读取（不存在则创建）symbol，请使用 `Symbol.for(key)`。
+
+  - 该调用会检查全局注册表，如果有一个描述为 `key` 的 symbol，则返回该 symbol，否则将创建一个新 symbol（`Symbol(key)`），并通过给定的 `key` 将其存储在注册表中。
+
+  - 例如：
+
+    ```javascript
+    // 从全局注册表中读取
+    let id = Symbol.for("id"); // 如果该 symbol 不存在，则创建它
+    
+    // 再次读取（可能是在代码中的另一个位置）
+    let idAgain = Symbol.for("id");
+    
+    // 相同的 symbol
+    alert( id === idAgain ); // true
+    ```
+
+- 对于全局 symbol，`Symbol.for(key)` 按名字返回一个 symbol。相反，通过全局 symbol 返回一个名字，我们可以使用 `Symbol.keyFor(sym)`
+
+  例如：
+
+  ```javascript
+  let globalSymbol = Symbol.for("name");
+  let localSymbol = Symbol("name");
+  
+  alert( Symbol.keyFor(globalSymbol) ); // name，全局 symbol
+  alert( Symbol.keyFor(localSymbol) ); // undefined，非全局
+  
+  alert( localSymbol.description ); // name
+  ```
+
+### 3.8 对象 -- 原始值转换*
+
+- JavaScript 不允许自定义运算符对对象的处理方式。与其他一些编程语言（Ruby，C++）不同，我们无法实现特殊的对象处理方法来处理加法（或其他运算）。
+
+  在此类运算的情况下，对象会被自动转换为原始值，然后对这些原始值进行运算，并得到运算结果（也是一个原始值）。
+
+- 转换规则
+  - 没有转换为布尔值。所有的对象在布尔上下文（context）中均为 `true`，就这么简单。只有字符串和数字转换。
+  - 数字转换发生在对象相减或应用数学函数时。例如，`Date` 对象可以相减，`date1 - date2` 的结果是两个日期之间的差值。
+  - 至于字符串转换 —— 通常发生在我们像 `alert(obj)` 这样输出一个对象和类似的上下文中。
+
+- 对象到原始值的转换，是由许多期望以原始值作为值的内建函数和运算符自动调用的。
+
+  这里有三种类型（hint）：
+
+  - `"string"`（对于 `alert` 和其他需要字符串的操作）
+  - `"number"`（对于数学运算）
+  - `"default"`（少数运算符，通常对象以和 `"number"` 相同的方式实现 `"default"` 转换）
+
+  规范明确描述了哪个运算符使用哪个 hint。
+
+  转换算法是：
+
+  1. 调用 `obj[Symbol.toPrimitive](hint)` 如果这个方法存在，
+  2. 否则，如果 hint 是`"string"`
+     - 尝试调用 `obj.toString()` 或 `obj.valueOf()`，无论哪个存在。
+  3. 否则，如果 hint 是`"number"`或者`"default"`
+     - 尝试调用 `obj.valueOf()` 或 `obj.toString()`，无论哪个存在。
+
+  所有这些方法都必须返回一个原始值才能工作（如果已定义）。
+
+- 在实际使用中，通常只实现 `obj.toString()` 作为字符串转换的“全能”方法就足够了，该方法应该返回对象的“人类可读”表示，用于日志记录或调试。
+
+## 4. 数据类型
+
+### 4.1 原始类型的方法
+
+- 除 `null` 和 `undefined` 以外的原始类型都提供了许多有用的方法。我们后面的章节中学习这些内容。
+
+  - 例如，字符串方法 [str.toUpperCase()](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase) 返回一个大写化处理的字符串。
+
+    用法演示如下：
+
+    ```javascript
+    let str = "Hello";
+    
+    alert( str.toUpperCase() ); // HELLO
+    ```
+
+  - 很简单，对吧？以下是 `str.toUpperCase()` 中实际发生的情况：
+
+    1. 字符串 `str` 是一个原始值。因此，在访问其属性时，会创建一个包含字符串字面值的特殊对象，并且具有可用的方法，例如 `toUpperCase()`。
+    2. 该方法运行并返回一个新的字符串（由 `alert` 显示）。
+    3. 特殊对象被销毁，只留下原始值 `str`。
+
+- 从形式上讲，这些方法通过临时对象工作，但 JavaScript 引擎可以很好地调整，以在内部对其进行优化，因此调用它们并不需要太高的成本。
+
+- **构造器** `String/Number/Boolean` **仅供内部使用**
+
+  - 像 Java 这样的一些语言允许我们使用 `new Number(1)` 或 `new Boolean(false)` 等语法，明确地为原始类型创建“对象包装器”。
+
+    在 JavaScript 中，由于历史原因，这也是可以的，但极其 **不推荐**。因为这样会出问题。
+
+    例如：
+
+    ```javascript
+    alert( typeof 0 ); // "number"
+    
+    alert( typeof new Number(0) ); // "object"!
+    ```
+
+    对象在 `if` 中始终为真，所以此处的 alert 将显示：
+
+    ```javascript
+    let zero = new Number(0);
+    
+    if (zero) { // zero 为 true，因为它是一个对象
+      alert( "zero is truthy?!?" );
+    }
+    ```
+
+  - 另一方面，调用不带 `new`（关键字）的 `String/Number/Boolean` 函数是可以的且有效的。它们将一个值转换为相应的类型：转成字符串、数字或布尔值（原始类型）。
+
+    例如，下面完全是有效的：
+
+    ```javascript
+    let num = Number("123"); // 将字符串转成数字
+    ```
+
+- **null/undefined 没有任何方法**
+
+### 4.2 数字类型
+
+要写有很多零的数字：
+
+- 将 `"e"` 和 0 的数量附加到数字后。就像：`123e6` 与 `123` 后面接 6 个 0 相同。
+- `"e"` 后面的负数将使数字除以 1 后面接着给定数量的零的数字。例如 `123e-6` 表示 `0.000123`（`123` 的百万分之一）。
+
+对于不同的数字系统：
+
+- 可以直接在十六进制（`0x`），八进制（`0o`）和二进制（`0b`）系统中写入数字。
+- `parseInt(str，base)` 将字符串 `str` 解析为在给定的 `base` 数字系统中的整数，`2 ≤ base ≤ 36`。
+- `num.toString(base)` 将数字转换为在给定的 `base` 数字系统中的字符串。
+- **使用两个点来调用一个方法**
+  - 请注意 `123456..toString(36)` 中的两个点不是打错了。如果我们想直接在一个数字上调用一个方法，比如上面例子中的 `toString`，那么我们需要在它后面放置两个点 `..`。
+  - 如果我们放置一个点：`123456.toString(36)`，那么就会出现一个 error，因为 JavaScript 语法隐含了第一个点之后的部分为小数部分。如果我们再放一个点，那么 JavaScript 就知道小数部分为空，现在使用该方法。
+  - 也可以写成 `(123456).toString(36)`。
+
+对于常规数字检测：
+
+- `isNaN(value)` 将其参数转换为数字，然后检测它是否为 `NaN`
+- `isFinite(value)` 将其参数转换为数字，如果它是常规数字，则返回 `true`，而不是 `NaN/Infinity/-Infinity`
+
+要将 `12pt` 和 `100px` 之类的值转换为数字：
+
+- 使用 `parseInt/parseFloat` 进行“软”转换，它从字符串中读取数字，然后返回在发生 error 前可以读取到的值。
+
+小数：
+
+- 使用 `Math.floor`，`Math.ceil`，`Math.trunc`，`Math.round` 或 `num.toFixed(precision)` 进行舍入。
+- 请确保记住使用小数时会损失精度。
+
+更多数学函数：
+
+- 需要时请查看 [Math](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math) 对象。这个库很小，但是可以满足基本的需求。
+
+### 4.3 字符串
+
+### 4.4 数组
+
+### 4.5 数组方法
+
+### 4.6 Iterable object（可迭代对象）
+
+### 4.7 Map and Set（映射和集合）
+
+### 4.8 WeakMap and WeakSet（弱映射和弱集合）
+
+### 4.9 Object.keys，values，entries
+
+### 4.10 解构赋值
+
+### 4.11 日期和时间
+
+### 4.12 JSON方法，toJSON
